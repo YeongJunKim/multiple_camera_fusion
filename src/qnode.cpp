@@ -84,7 +84,12 @@ void QNode::IrImageCallback(const sensor_msgs::ImageConstPtr& msg_img)
 {
   if(ir_img_qnode == NULL && !isIrRecv)
   {
-
+      ir_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::BGR8)->image);
+      if(img_qnode != NULL)
+      {
+        isIrRecv = 1;
+        Q_EMIT recvImg();
+      }
   }
 }
 void QNode::LidarImageCallback(const sensor_msgs::ImageConstPtr& msg_img)

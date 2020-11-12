@@ -50,12 +50,9 @@ void MainWindow::updateImg()
     Mat imgOrg(*qnode.img_qnode); //qnode-> receive
     if(!qnode.img_qnode->empty() && !imgOrg.empty() && isRecv)
     {
-
         QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
         ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg.rgbSwapped()));
-
     }
-
     delete qnode.img_qnode;
     if(qnode.img_qnode != NULL) qnode.img_qnode = NULL;
     isRecv = false;
