@@ -1,2 +1,1 @@
-# multiple_camera_fusion
-multiple properties camera fusion
+# ros_qt_basic_image_view
