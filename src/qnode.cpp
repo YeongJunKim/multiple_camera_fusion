@@ -27,6 +27,8 @@ bool isRecv = false;
 bool isIrRecv = false;
 bool isLidarRecv = false;
 
+int mode = MODE_ONLY_COLOR;
+
 /*****************************************************************************
 ** Implementation
 *****************************************************************************/
@@ -52,7 +54,8 @@ bool QNode::init() {
     ros::start(); // explicitly needed since our nodehandle is going out of scope.
     ros::NodeHandle n;
     image_transport::ImageTransport it(n);
-        image_sub = it.subscribe("/usb_cam/image_raw", 100, &QNode::imageCallback, this);
+        image_color_sub = it.subscribe("/camera/color/image_raw", 100, &QNode::imageCallback, this);
+        image_lidar_sub = it.subscribe("/camera/depth/image_rect_raw", 100, &QNode::LidarImageCallback, this);
     start();
     return true;
 }
@@ -75,7 +78,7 @@ void QNode::imageCallback(const sensor_msgs::ImageConstPtr& msg_img)
         img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::BGR8)->image);
         if(img_qnode != NULL)
         {
-            isRecv = 1;
+            isRecv = true;
             Q_EMIT recvImg();
         }
     }
@@ -85,16 +88,27 @@ void QNode::IrImageCallback(const sensor_msgs::ImageConstPtr& msg_img)
   if(ir_img_qnode == NULL && !isIrRecv)
   {
       ir_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::BGR8)->image);
-      if(img_qnode != NULL)
+
+      if(ir_img_qnode != NULL)
       {
-        isIrRecv = 1;
-        Q_EMIT recvImg();
+        isIrRecv = true;
+        Q_EMIT recvImgIr();
       }
   }
 }
 void QNode::LidarImageCallback(const sensor_msgs::ImageConstPtr& msg_img)
 {
-
+//  ROS_INFO("LIDAR calblack");
+  if(lidar_img_qnode == NULL && !isLidarRecv)
+  {
+      lidar_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::TYPE_16UC1)->image);
+//      ROS_INFO("lidar : col %d, row %d", lidar_img_qnode->cols, lidar_img_qnode->rows);
+      if(lidar_img_qnode != NULL)
+      {
+        isLidarRecv = true;
+        Q_EMIT recvImgLidar();
+      }
+  }
 }
 
 }  // namespace imageView_example

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package>
-  <name>muti_cam_fusion</name>
+  <name>multi_cam_fusion</name>
   <version>0.1.0</version>
   <description>
 
      qt_basic_image_view
 
   </description>
-  <maintainer email="kdh@gmail.com">kdh</maintainer>
+  <maintainer email="dud3722000@naver.com">kdh</maintainer>
   <author>kdh</author>
   <license>BSD</license>
   <!-- <url type="bugtracker">https://github.com/stonier/qt_ros/issues</url> -->

@@ -36,6 +36,13 @@
 #include <iostream>
 #endif
 
+#define MODE_NONE           0
+#define MODE_ONLY_COLOR     1
+#define MODE_ONLY_THERMAL   2
+#define MODE_ONLY_LIDAR     3
+#define MODE_COLOR_THERMAL  4
+#define MODE_COLOR_LIDAR    5
+
 /*****************************************************************************
 ** Namespaces
 *****************************************************************************/
@@ -60,12 +67,16 @@ public:
 
 Q_SIGNALS:
     void recvImg();
+    void recvImgIr();
+    void recvImgLidar();
     void rosShutdown();
 private:
     int init_argc;
     char** init_argv;
 
-    image_transport::Subscriber image_sub;
+    image_transport::Subscriber image_color_sub;
+    image_transport::Subscriber image_ir_sub;
+    image_transport::Subscriber image_lidar_sub;
 
     void imageCallback(const sensor_msgs::ImageConstPtr &msg_img);
     void IrImageCallback(const sensor_msgs::ImageConstPtr& msg_img);

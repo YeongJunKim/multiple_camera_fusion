@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QRosApp</string>
+   <string>multi_cam</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -24,8 +24,8 @@
    <widget class="QLabel" name="labelOrg">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>10</x>
+      <y>10</y>
       <width>640</width>
       <height>480</height>
      </rect>
@@ -47,31 +47,150 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_update">
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>260</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>310</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>660</x>
       <y>10</y>
-      <width>89</width>
-      <height>25</height>
+      <width>169</width>
+      <height>27</height>
      </rect>
     </property>
-    <property name="text">
-     <string>list update</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="button_update">
+       <property name="text">
+        <string>list update</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="button_set">
+       <property name="text">
+        <string>set</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <widget class="QPushButton" name="button_set">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>10</y>
-      <width>89</width>
-      <height>25</height>
+      <x>670</x>
+      <y>370</y>
+      <width>421</width>
+      <height>83</height>
      </rect>
     </property>
-    <property name="text">
-     <string>set</string>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="checkBox_only_color">
+       <property name="text">
+        <string>Only Color</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="checkBox_only_thermal">
+       <property name="text">
+        <string>Only Thermal</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCheckBox" name="checkBox_only_lidar">
+       <property name="text">
+        <string>Only Lidar</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="checkBox_thermal">
+       <property name="text">
+        <string>Thermal</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="checkBox_lidar">
+       <property name="text">
+        <string>Lidar</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>250</y>
+      <width>311</width>
+      <height>84</height>
+     </rect>
     </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_threshold_thermal">
+       <property name="text">
+        <string>Threshold Thermal (C)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QSlider" name="horizontalSlider_threshold_thermal">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_threshold_disatnce">
+       <property name="text">
+        <string>Threshold Distance (m)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QSlider" name="horizontalSlider_threshold_distance">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

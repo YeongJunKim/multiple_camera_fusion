@@ -43,16 +43,34 @@ public:
 
 public Q_SLOTS:
         void updateImg();
+        void updateImgIr();
+        void updateImgLidar();
 
 //private slots:
         void on_button_update_clicked();
 
+        void on_checkBox_only_color_clicked();
+
+        void on_checkBox_lidar_clicked();
+
+        void on_checkBox_thermal_clicked();
+
+        void on_checkBox_only_lidar_clicked();
+
+        void on_checkBox_only_thermal_clicked();
+
+        void on_horizontalSlider_threshold_thermal_sliderMoved(int position);
+
+        void on_horizontalSlider_threshold_distance_sliderMoved(int position);
+
+
 private:
 	Ui::MainWindowDesign ui;
 	QNode qnode;
+  int checkMode(void);
 
-    int mWidth = 640;
-    int mHeight = 480;
+  int mWidth = 640;
+  int mHeight = 480;
 
 };
 
