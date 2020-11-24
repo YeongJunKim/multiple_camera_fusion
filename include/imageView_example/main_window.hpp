@@ -62,7 +62,7 @@ public Q_SLOTS:
         void on_horizontalSlider_threshold_thermal_sliderMoved(int position);
 
         void on_horizontalSlider_threshold_distance_sliderMoved(int position);
-
+        float map(float value, float istart, float istop, float ostart, float ostop);
 
 private:
 	Ui::MainWindowDesign ui;

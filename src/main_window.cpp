@@ -111,14 +111,35 @@ void MainWindow::updateImgLidar()
 
 
   cv::resize(roi, dst, cv::Size(width,height),0,0,CV_INTER_NN);
+  cv::Mat th;
+  cv::Mat gray;
+  cv::Mat step1;
 
-  Mat imgOrg(dst);
+//  cv::cvtColor(dst,gray,cv::COLOR_YUV2RGB_IYUV);
+  int value = ui.horizontalSlider_threshold_distance->value();
+  double t = (double)map(value,0,100,0,255);
+  ROS_INFO("t :%f", t);
+  ROS_INFO("dims: %d", dst.dims);
+  try {
+      dst.convertTo(gray,CV_8UC1);
+      cv::threshold(gray,th,t,255,cv::THRESH_BINARY);
+      th.convertTo(step1,CV_16UC1);
+//    cv::threshold(dst,th,0,65535,cv::THRESH_BINARY);
+//    cv::threshold(dst, th, 0,255,THRESH_BINARY);
+//    cv::threshold(dst, th, (double)t, (double)255, THRESH_BINARY);
+//    cv::threshold(dst,th,100,1000,THRESH_BINARY);
+  } catch (cv::Exception& e) {
+    const char* err_msg = e.what();
+    std::cout << "exception caught: " << err_msg << std::endl;
+  }
+
+  Mat imgOrg(gray);
 
   if(!qnode.lidar_img_qnode->empty() && !imgOrg.empty() && isLidarRecv)
   {
     if(mode == MODE_ONLY_LIDAR)
     {
-      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB16);
+      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_Indexed8);
       ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg));
     }
   }
@@ -231,7 +252,9 @@ void imageView_example::MainWindow::on_horizontalSlider_threshold_distance_slide
 
 
 
-
+float imageView_example::MainWindow::map(float value, float istart, float istop, float ostart, float ostop) {
+  return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
 
 int imageView_example::MainWindow::checkMode()
 {

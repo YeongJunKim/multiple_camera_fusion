@@ -21,6 +21,8 @@ find_package(OpenCV REQUIRED)
 
 find_package(Boost REQUIRED COMPONENTS thread)
 
+find_package(Qt5 COMPONENTS Core Qml Quick REQUIRED)
+
 include_directories(${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     )
@@ -29,6 +31,7 @@ include_directories(${catkin_INCLUDE_DIRS}
 # exporting anything. 
 catkin_package()
 
+qt5_add_resources(RESOURCES qml.qrc)
 ##############################################################################
 # Qt Environment
 ##############################################################################

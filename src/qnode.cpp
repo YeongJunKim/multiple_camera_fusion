@@ -101,7 +101,7 @@ void QNode::LidarImageCallback(const sensor_msgs::ImageConstPtr& msg_img)
 //  ROS_INFO("LIDAR calblack");
   if(lidar_img_qnode == NULL && !isLidarRecv)
   {
-      lidar_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::TYPE_16UC1)->image);
+lidar_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::TYPE_16UC1)->image);
 //      ROS_INFO("lidar : col %d, row %d", lidar_img_qnode->cols, lidar_img_qnode->rows);
       if(lidar_img_qnode != NULL)
       {
