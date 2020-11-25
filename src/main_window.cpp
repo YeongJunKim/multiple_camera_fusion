@@ -71,6 +71,7 @@ void MainWindow::updateImg()
 
 
 
+
 //    Mat imgOrg(*qnode.img_qnode); //qnode-> receive
     Mat imgOrg(dst);
 
@@ -88,7 +89,33 @@ void MainWindow::updateImg()
 }
 void MainWindow::updateImgIr()
 {
-  isIrRecv = false;
+  ROS_INFO("debug1");
+  cv::Mat dst, cvt,cvt2, th;
+  int width  = ui.labelOrg->width();
+  int height = ui.labelOrg->height();
+  cv::resize(*qnode.ir_img_qnode, dst, cv::Size(width,height),0,0,CV_INTER_NN);
+
+
+  int value = ui.horizontalSlider_threshold_thermal->value();
+  double t = (double)map(value,0,100,0,255);
+  cv::threshold(dst,th,t,65535,cv::THRESH_BINARY);
+
+  cv::cvtColor(th, cvt2, cv::COLOR_GRAY2BGR);
+
+  Mat imgOrg(cvt2);
+  ROS_INFO("debug1");
+  if(!qnode.ir_img_qnode->empty() && !imgOrg.empty() && isIrRecv)
+  {
+    if(mode == MODE_ONLY_THERMAL)
+    {
+      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
+      ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg.rgbSwapped()));
+    }
+  }
+  ROS_INFO("debug1");
+  delete qnode.ir_img_qnode;
+  if(qnode.ir_img_qnode != NULL) qnode.ir_img_qnode = NULL;
+isIrRecv = false;
 }
 
 void MainWindow::updateImgLidar()
@@ -114,6 +141,7 @@ void MainWindow::updateImgLidar()
   cv::Mat th;
   cv::Mat gray;
   cv::Mat step1;
+  cv::Mat cvt;
 
 //  cv::cvtColor(dst,gray,cv::COLOR_YUV2RGB_IYUV);
   int value = ui.horizontalSlider_threshold_distance->value();
@@ -121,25 +149,20 @@ void MainWindow::updateImgLidar()
   ROS_INFO("t :%f", t);
   ROS_INFO("dims: %d", dst.dims);
   try {
-      dst.convertTo(gray,CV_8UC1);
-      cv::threshold(gray,th,t,255,cv::THRESH_BINARY);
-      th.convertTo(step1,CV_16UC1);
-//    cv::threshold(dst,th,0,65535,cv::THRESH_BINARY);
-//    cv::threshold(dst, th, 0,255,THRESH_BINARY);
-//    cv::threshold(dst, th, (double)t, (double)255, THRESH_BINARY);
-//    cv::threshold(dst,th,100,1000,THRESH_BINARY);
+      cv::threshold(dst,th,t,255,cv::THRESH_BINARY);
+      cv::cvtColor(th, cvt, cv::COLOR_GRAY2BGR);
   } catch (cv::Exception& e) {
     const char* err_msg = e.what();
     std::cout << "exception caught: " << err_msg << std::endl;
   }
 
-  Mat imgOrg(gray);
+  Mat imgOrg(cvt);
 
   if(!qnode.lidar_img_qnode->empty() && !imgOrg.empty() && isLidarRecv)
   {
     if(mode == MODE_ONLY_LIDAR)
     {
-      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_Indexed8);
+      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB16);
       ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg));
     }
   }
