@@ -15,7 +15,7 @@
 #include <string>
 #include <std_msgs/String.h>
 #include <sstream>
-#include "../include/imageView_example/qnode.hpp"
+#include "../include/qnode.hpp"
 
 /*****************************************************************************
 ** Namespaces

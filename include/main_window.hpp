@@ -17,6 +17,7 @@
 #include "qnode.hpp"
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/highgui/highgui.hpp>
+#include <my_qlabel.hpp>
 /*****************************************************************************
 ** Namespace
 *****************************************************************************/
@@ -63,6 +64,12 @@ public Q_SLOTS:
 
         void on_horizontalSlider_threshold_distance_sliderMoved(int position);
         float map(float value, float istart, float istop, float ostart, float ostop);
+
+
+        void Mouse_current_pos();
+        void Mouse_Pressed();
+        void Mouse_left();
+
 
 private:
 	Ui::MainWindowDesign ui;

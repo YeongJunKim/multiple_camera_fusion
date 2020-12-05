@@ -12,7 +12,9 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <iostream>
-#include "../include/imageView_example/main_window.hpp"
+#include "../include/main_window.hpp"
+#include "../include/my_qlabel.hpp"
+
 
 /*****************************************************************************
 ** Namespaces
@@ -46,6 +48,10 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(&qnode, SIGNAL(recvImg()), this, SLOT(updateImg()));
     QObject::connect(&qnode, SIGNAL(recvImgIr()), this, SLOT(updateImgIr()));
     QObject::connect(&qnode, SIGNAL(recvImgLidar()), this, SLOT(updateImgLidar()));
+
+    connect(ui.labelOrg, SIGNAL(Mouse_Pos()), this, SLOT(Mouse_current_pos()));
+    connect(ui.labelOrg, SIGNAL(Mouse_Pressed()), this, SLOT(Mouse_Pressed()));
+    connect(ui.labelOrg, SIGNAL(Mouse_Left()), this, SLOT(Mouse_left()));
 
 
     int value = ui.horizontalSlider_threshold_thermal->value();
@@ -280,6 +286,21 @@ void imageView_example::MainWindow::on_horizontalSlider_threshold_distance_slide
 
 float imageView_example::MainWindow::map(float value, float istart, float istop, float ostart, float ostop) {
   return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
+
+void MainWindow::Mouse_current_pos()
+{
+  ROS_INFO("current_pos X=%d, Y=%d", ui.labelOrg->x, ui.labelOrg->y);
+}
+
+void MainWindow::Mouse_Pressed()
+{
+  ROS_INFO("Mouse Pressed X=%d, Y=%d", ui.labelOrg->x, ui.labelOrg->y);
+}
+
+void MainWindow::Mouse_left()
+{
+  ROS_INFO("Mouse Left");
 }
 
 int imageView_example::MainWindow::checkMode()
