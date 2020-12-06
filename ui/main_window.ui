@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1120</width>
-    <height>558</height>
+    <width>1121</width>
+    <height>793</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@
       <x>660</x>
       <y>40</y>
       <width>441</width>
-      <height>192</height>
+      <height>451</height>
      </rect>
     </property>
    </widget>
@@ -51,7 +51,7 @@
     <property name="geometry">
      <rect>
       <x>980</x>
-      <y>260</y>
+      <y>550</y>
       <width>113</width>
       <height>25</height>
      </rect>
@@ -64,7 +64,7 @@
     <property name="geometry">
      <rect>
       <x>980</x>
-      <y>310</y>
+      <y>600</y>
       <width>113</width>
       <height>25</height>
      </rect>
@@ -102,8 +102,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>370</y>
+      <x>660</x>
+      <y>640</y>
       <width>421</width>
       <height>83</height>
      </rect>
@@ -156,7 +156,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>250</y>
+      <y>540</y>
       <width>311</width>
       <height>84</height>
      </rect>
@@ -192,13 +192,170 @@
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="label_threshold_thermal_8">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>510</y>
+      <width>121</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Control pannel</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>501</y>
+      <width>641</width>
+      <height>220</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0,0,0,0">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_threshold_thermal_2">
+       <property name="text">
+        <string>Target List:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="6">
+      <widget class="QPushButton" name="button_delete_id">
+       <property name="text">
+        <string>delete id</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="5">
+      <widget class="QLineEdit" name="lineEdit_9">
+       <property name="text">
+        <string>NC</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="6">
+      <widget class="QPushButton" name="button_update_5">
+       <property name="text">
+        <string>NC</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_threshold_thermal_7">
+       <property name="text">
+        <string>manually:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_threshold_thermal_3">
+       <property name="text">
+        <string>x1:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="label_threshold_thermal_4">
+       <property name="text">
+        <string>y1:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLabel" name="label_threshold_thermal_5">
+       <property name="text">
+        <string>x2:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLabel" name="label_threshold_thermal_6">
+       <property name="text">
+        <string>y2:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLineEdit" name="lineEdit_x1">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="lineEdit_y1">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLineEdit" name="lineEdit_x2">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="3">
+      <widget class="QLineEdit" name="lineEdit_y2">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="4">
+      <widget class="QPushButton" name="button_manually_add">
+       <property name="text">
+        <string>add</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" rowspan="4" colspan="5">
+      <widget class="QTableView" name="tableView">
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>30</number>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="5" colspan="2">
+      <widget class="QPushButton" name="button_select_position">
+       <property name="text">
+        <string>select position</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QLineEdit" name="lineEdit_delete_id">
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="5" colspan="2">
+      <widget class="QPushButton" name="button_update_clear">
+       <property name="text">
+        <string>clear</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1120</width>
+     <width>1121</width>
      <height>22</height>
     </rect>
    </property>
@@ -213,7 +370,13 @@
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
+   <widget class="QMenu" name="menudescription">
+    <property name="title">
+     <string>description</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menudescription"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Quit">

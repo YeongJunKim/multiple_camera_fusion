@@ -17,7 +17,9 @@
 #include "qnode.hpp"
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/highgui/highgui.hpp>
-#include <my_qlabel.hpp>
+#include <my_qlabel.h>
+#include <QStandardItemModel>
+#include <QTimer>
 /*****************************************************************************
 ** Namespace
 *****************************************************************************/
@@ -63,12 +65,27 @@ public Q_SLOTS:
         void on_horizontalSlider_threshold_thermal_sliderMoved(int position);
 
         void on_horizontalSlider_threshold_distance_sliderMoved(int position);
+
+        void on_button_select_position_clicked();
+
+        void on_button_update_clear_clicked();
+
+        void on_button_manually_add_clicked();
+
+        void on_button_delete_id_clicked();
+
+
         float map(float value, float istart, float istop, float ostart, float ostop);
 
 
         void Mouse_current_pos();
         void Mouse_Pressed();
+        void Mouse_Released();
         void Mouse_left();
+
+
+        void updateLabels();
+        void OnTimerCallbackFunction();
 
 
 private:
@@ -78,6 +95,13 @@ private:
 
   int mWidth = 640;
   int mHeight = 480;
+
+  QStandardItemModel *myModel;
+
+  int button_flag = 0;
+
+  //timer
+  shared_ptr<QTimer> m_pTimer;
 
 };
 
