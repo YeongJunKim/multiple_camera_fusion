@@ -466,6 +466,11 @@ void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
       mmloc = flir.min_max_location(img, Rect(Point(x1,y1),Point(x2,y2)));
       cv::circle(*img,mmloc.min_point,5,Scalar(255,0,0),3,4,0);
       cv::circle(*img,mmloc.max_point,5,Scalar(0,0,255),3,4,0);
+
+      QStandardItem *max = new QStandardItem(QString::number(mmloc.max_degC));
+      QStandardItem *min = new QStandardItem(QString::number(mmloc.min_degC));
+      myModel->setItem(i,5,max);
+      myModel->setItem(i,6,min);
     }
     rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
     putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0),1);

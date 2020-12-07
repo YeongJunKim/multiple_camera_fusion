@@ -23,6 +23,12 @@ typedef struct minmaxloc
 {
   double min;
   double max;
+  double min_degC;
+  double min_degF;
+  double min_degK;
+  double max_degC;
+  double max_degF;
+  double max_degK;
   cv::Point min_point;
   cv::Point max_point;
 }minmaxloc_t;
@@ -39,6 +45,9 @@ public:
   void display(cv::Mat *img, cv::Rect rect, cv::Scalar scalar, int thickness, int linetype, int shift);
 
   minmaxloc_t min_max_location(cv::Mat *img_, cv::Rect interestmask);
+
+  double pixel2degC(double val);
+  double pixel2degF(double val);
 
 };
 
