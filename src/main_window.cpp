@@ -15,6 +15,7 @@
 #include <iostream>
 #include "../include/main_window.hpp"
 #include "../include/my_qlabel.h"
+#include "../include/my_flir.h"
 
 
 /*****************************************************************************
@@ -347,7 +348,7 @@ void imageView_example::MainWindow::on_button_manually_add_clicked()
 {
   ROS_INFO("add button clicked");
   QList<QStandardItem*> items;
-  int id = rand();
+  int id = rand()%1000;
   int x1,y1,x2,y2;
 
   int x1_ = ui.lineEdit_x1->text().toInt();
@@ -420,6 +421,24 @@ void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
   //get tablerowsize
   int rows = ui.tableView->model()->rowCount();
 
+
+  if(this->button_flag == 0)
+  {
+    int x1,x2,y1,y2;
+    x1 = ui.lineEdit_x1->text().toInt();
+    y1 = ui.lineEdit_y1->text().toInt();
+    x2 = ui.lineEdit_x2->text().toInt();
+    y2 = ui.lineEdit_y2->text().toInt();
+    if(x1 * x2 * y1 * y2 == 0)
+    {
+
+    }
+    else
+    {
+      rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(255,0,0),3,4,0);
+    }
+  }
+
   if(this->button_flag == 2)
   {
     int x1,x2,y1,y2;
@@ -429,9 +448,9 @@ void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
     y2 = ui.labelOrg->y;
     rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(255,0,0),3,4,0);
   }
+
   if(rows == 0)
     return;
-  //get label data x1 x2 y1 y2
   for(int i = 0; i < rows; i++)
   {
     int x1, x2, y1, y2;
@@ -440,8 +459,16 @@ void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
     y1 = ui.tableView->model()->index(i,2).data().toInt();
     x2 = ui.tableView->model()->index(i,3).data().toInt();
     y2 = ui.tableView->model()->index(i,4).data().toInt();
-    rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,0,255),3,4,0);
-    putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 1, Scalar(200,0,0),1);
+    if(mode == MODE_ONLY_THERMAL)
+    {
+      my_flir flir;
+      minmaxloc_t mmloc;
+      mmloc = flir.min_max_location(img, Rect(Point(x1,y1),Point(x2,y2)));
+      cv::circle(*img,mmloc.min_point,5,Scalar(255,0,0),3,4,0);
+      cv::circle(*img,mmloc.max_point,5,Scalar(0,0,255),3,4,0);
+    }
+    rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
+    putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0),1);
   }
 }
 
@@ -464,7 +491,7 @@ void imageView_example::MainWindow::updateImage(cv::Mat *img_)
 }
 void MainWindow::OnTimerCallbackFunction()
 {
-  ROS_INFO("TimerCallbackFunction Called");
+//  ROS_INFO("TimerCallbackFunction Called");
   // check thermal in labels
 
 }

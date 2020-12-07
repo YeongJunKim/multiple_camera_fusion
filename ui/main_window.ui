@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1121</width>
-    <height>793</height>
+    <width>1263</width>
+    <height>1024</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,9 +26,15 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>640</width>
-      <height>480</height>
+      <width>960</width>
+      <height>720</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -40,9 +46,9 @@
    <widget class="QListView" name="listView_topic_list">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>40</y>
-      <width>441</width>
+      <x>980</x>
+      <y>50</y>
+      <width>261</width>
       <height>451</height>
      </rect>
     </property>
@@ -51,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>980</x>
-      <y>550</y>
+      <y>780</y>
       <width>113</width>
       <height>25</height>
      </rect>
@@ -64,7 +70,7 @@
     <property name="geometry">
      <rect>
       <x>980</x>
-      <y>600</y>
+      <y>830</y>
       <width>113</width>
       <height>25</height>
      </rect>
@@ -76,24 +82,24 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>970</x>
       <y>10</y>
       <width>169</width>
-      <height>27</height>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="button_update">
-       <property name="text">
-        <string>list update</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="button_set">
        <property name="text">
         <string>set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="button_update">
+       <property name="text">
+        <string>list update</string>
        </property>
       </widget>
      </item>
@@ -103,8 +109,8 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>640</y>
-      <width>421</width>
+      <y>880</y>
+      <width>431</width>
       <height>83</height>
      </rect>
     </property>
@@ -156,16 +162,16 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>540</y>
+      <y>780</y>
       <width>311</width>
       <height>84</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_threshold_thermal">
-       <property name="text">
-        <string>Threshold Thermal (C)</string>
+     <item row="3" column="0">
+      <widget class="QSlider" name="horizontalSlider_threshold_distance">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -176,17 +182,17 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_threshold_thermal">
+       <property name="text">
+        <string>Threshold Thermal (C)</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_threshold_disatnce">
        <property name="text">
         <string>Threshold Distance (m)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QSlider" name="horizontalSlider_threshold_distance">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -196,7 +202,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>510</y>
+      <y>740</y>
       <width>121</width>
       <height>17</height>
      </rect>
@@ -209,7 +215,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>501</y>
+      <y>740</y>
       <width>641</width>
       <height>220</height>
      </rect>
@@ -355,7 +361,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1121</width>
+     <width>1263</width>
      <height>22</height>
     </rect>
    </property>
