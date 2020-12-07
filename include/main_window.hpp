@@ -84,7 +84,8 @@ public Q_SLOTS:
         void Mouse_left();
 
 
-        void updateLabels();
+        void updateLabels(cv::Mat *img_);
+        void updateImage(cv::Mat *img_);
         void OnTimerCallbackFunction();
 
 

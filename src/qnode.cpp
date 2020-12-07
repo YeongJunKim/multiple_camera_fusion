@@ -57,7 +57,8 @@ bool QNode::init() {
         image_color_sub = it.subscribe("/camera/color/image_raw", 100, &QNode::imageCallback, this);
 //        image_lidar_sub = it.subscribe("/camera/depth/image_rect_raw", 100, &QNode::LidarImageCallback, this);
         image_lidar_sub = it.subscribe("/depth/out", 100, &QNode::LidarImageCallback, this);
-        image_ir_sub = it.subscribe("/lepton/out", 100, &QNode::IrImageCallback, this);
+//        image_ir_sub = it.subscribe("/lepton/out", 100, &QNode::IrImageCallback, this);
+        image_ir_sub = it.subscribe("/ir/usb_cam/image_raw", 100, &QNode::IrImageCallback, this);
     start();
     return true;
 }
@@ -89,8 +90,8 @@ void QNode::IrImageCallback(const sensor_msgs::ImageConstPtr& msg_img)
 {
   if(ir_img_qnode == NULL && !isIrRecv)
   {
-      ir_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::TYPE_8UC1)->image);
-
+//      ir_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::TYPE_8UC1)->image);
+      ir_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img,enc::BGR8)->image);
       if(ir_img_qnode != NULL)
       {
         isIrRecv = true;
