@@ -27,7 +27,7 @@ bool isRecv = false;
 bool isIrRecv = false;
 bool isLidarRecv = false;
 
-int mode = MODE_ONLY_COLOR;
+int mode = MODE_ONLY_THERMAL;
 
 /*****************************************************************************
 ** Implementation

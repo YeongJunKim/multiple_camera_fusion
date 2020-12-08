@@ -74,6 +74,7 @@ public Q_SLOTS:
 
         void on_button_delete_id_clicked();
 
+        void on_checkBox_gray_thermal_clicked();
 
         float map(float value, float istart, float istop, float ostart, float ostop);
 
@@ -87,6 +88,7 @@ public Q_SLOTS:
         void updateLabels(cv::Mat *img_);
         void updateImage(cv::Mat *img_);
         void OnTimerCallbackFunction();
+
 
 
 private:

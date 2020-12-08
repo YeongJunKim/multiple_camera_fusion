@@ -89,15 +89,32 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::updateImg()
 {
-  cv::Mat dst, crop;
+  cv::Mat dst, crop, roi, output;
+
+  int l,r,u,b;
+  l = ui.lineEdit_color_roi_leftside->text().toInt();
+  r = ui.lineEdit_color_roi_rightside->text().toInt();
+  u = ui.lineEdit_color_roi_upperside->text().toInt();
+  b = ui.lineEdit_color_roi_bottomside->text().toInt();
+
+
 
   int width  = ui.labelOrg->width();
   int height = ui.labelOrg->height();
   cv::resize(*qnode.img_qnode, dst, cv::Size(width,height),0,0,CV_INTER_NN);
 
+  int x1,x2,y1,y2;
+  x1 = l;
+  y1 = u;
+  x2 = width - r;
+  y2 = height - b;
+  cv::Rect bounds(0,0,width, height);
+  cv::Rect intermask(cv::Point(x1,y1), cv::Point(x2,y2));
+  roi = dst(intermask & bounds);
+  cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
 
   //    Mat imgOrg(*qnode.img_qnode); //qnode-> receive
-  Mat imgOrg(dst);
+  Mat imgOrg(output);
   updateLabels(&imgOrg);
   if(!qnode.img_qnode->empty() && !imgOrg.empty() && isRecv)
   {
@@ -114,7 +131,16 @@ void MainWindow::updateImg()
 void MainWindow::updateImgIr()
 {
   //  ROS_INFO("debug1");
-  cv::Mat dst, cvt,cvt2, th;
+  cv::Mat dst, cvt,cvt2, th, roi, output, gray,grayout;
+
+
+
+  int l,r,u,b;
+  l = ui.lineEdit_IR_roi_leftside->text().toInt();
+  r = ui.lineEdit_IR_roi_rightside->text().toInt();
+  u = ui.lineEdit_IR_roi_upperside->text().toInt();
+  b = ui.lineEdit_IR_roi_bottomside->text().toInt();
+
   int width  = ui.labelOrg->width();
   int height = ui.labelOrg->height();
   cv::resize(*qnode.ir_img_qnode, dst, cv::Size(width,height),0,0,CV_INTER_NN);
@@ -126,18 +152,40 @@ void MainWindow::updateImgIr()
 
 //  cv::cvtColor(th, cvt2, cv::COLOR_GRAY2BGR);
 
-  Mat imgOrg(dst);
-  updateLabels(&imgOrg);
-  //  ROS_INFO("debug1");
-  if(!qnode.ir_img_qnode->empty() && !imgOrg.empty() && isIrRecv)
+  int x1,x2,y1,y2;
+  x1 = l;
+  y1 = u;
+  x2 = width - r;
+  y2 = height - b;
+
+  cv::Rect bounds(0,0,width, height);
+  cv::Rect intermask(cv::Point(x1,y1), cv::Point(x2,y2));
+  roi = dst(intermask & bounds);
+  cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
+
+  cv::cvtColor(output,gray,CV_BGR2GRAY);
+  cv::cvtColor(gray,grayout,CV_GRAY2BGR);
+
+  if(mode == MODE_ONLY_THERMAL)
   {
-    if(mode == MODE_ONLY_THERMAL)
+    Mat imgOrg(output);
+    updateLabels(&imgOrg);
+    if(!qnode.ir_img_qnode->empty() && !imgOrg.empty() && isIrRecv)
     {
       QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
       ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg.rgbSwapped()));
     }
   }
-  //  ROS_INFO("debug1");
+  else if(mode == MODE_ONLY_THERMAL_GRAY)
+  {
+    Mat imgOrg(grayout);
+    updateLabels(&imgOrg);
+    if(!qnode.ir_img_qnode->empty() && !imgOrg.empty() && isIrRecv)
+    {
+      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
+      ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg.rgbSwapped()));
+    }
+  }
   delete qnode.ir_img_qnode;
   if(qnode.ir_img_qnode != NULL) qnode.ir_img_qnode = NULL;
   isIrRecv = false;
@@ -216,6 +264,7 @@ void imageView_example::MainWindow::on_checkBox_only_color_clicked()
   //  ui.checkBox_only_color->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_lidar->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_thermal->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_gray_thermal->setCheckState(Qt::CheckState::Unchecked);
   mode = MODE_ONLY_COLOR;
   ROS_INFO("MODE_ONLY_COLOR");
 }
@@ -228,6 +277,7 @@ void imageView_example::MainWindow::on_checkBox_only_thermal_clicked()
   ui.checkBox_only_color->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_lidar->setCheckState(Qt::CheckState::Unchecked);
   //  ui.checkBox_only_thermal->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_gray_thermal->setCheckState(Qt::CheckState::Unchecked);
   mode = MODE_ONLY_THERMAL;
   ROS_INFO("MODE_ONLY_THERMAL");
 }
@@ -240,6 +290,7 @@ void imageView_example::MainWindow::on_checkBox_only_lidar_clicked()
   ui.checkBox_only_color->setCheckState(Qt::CheckState::Unchecked);
   //  ui.checkBox_only_lidar->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_thermal->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_gray_thermal->setCheckState(Qt::CheckState::Unchecked);
   mode = MODE_ONLY_LIDAR;
   ROS_INFO("MODE_ONLY_LIDAR");
 }
@@ -252,6 +303,7 @@ void imageView_example::MainWindow::on_checkBox_thermal_clicked()
   ui.checkBox_only_color->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_lidar->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_thermal->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_gray_thermal->setCheckState(Qt::CheckState::Unchecked);
   mode = MODE_COLOR_THERMAL;
   ROS_INFO("MODE_COLOR_THERMAL");
 }
@@ -264,8 +316,20 @@ void imageView_example::MainWindow::on_checkBox_lidar_clicked()
   ui.checkBox_only_color->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_lidar->setCheckState(Qt::CheckState::Unchecked);
   ui.checkBox_only_thermal->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_gray_thermal->setCheckState(Qt::CheckState::Unchecked);
   mode = MODE_COLOR_LIDAR;
   ROS_INFO("MODE_COLOR_LIDAR");
+}
+
+void imageView_example::MainWindow::on_checkBox_gray_thermal_clicked()
+{
+  ui.checkBox_lidar->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_thermal->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_only_color->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_only_lidar->setCheckState(Qt::CheckState::Unchecked);
+  ui.checkBox_only_thermal->setCheckState(Qt::CheckState::Unchecked);
+  mode = MODE_ONLY_THERMAL_GRAY;
+  ROS_INFO("MODE_ONLY_THERMAL_GRAY");
 }
 
 void imageView_example::MainWindow::on_horizontalSlider_threshold_thermal_sliderMoved(int position)
@@ -501,6 +565,7 @@ void MainWindow::OnTimerCallbackFunction()
 
 }
 }  // namespace imageView_example
+
 
 
 

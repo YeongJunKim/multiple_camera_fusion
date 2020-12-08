@@ -40,10 +40,12 @@ minmaxloc_t my_flir::min_max_location(cv::Mat *img_, cv::Rect interestmask)
 
   returntype.min_point = returntype.min_point + offset;
   returntype.max_point = returntype.max_point + offset;
-  returntype.min_degC = pixel2degC((double)roi.at<uint8_t>(returntype.min_point));
-  returntype.max_degC = pixel2degC((double)roi.at<uint8_t>(returntype.max_point));
+  returntype.min_degC = pixel2degC(returntype.min);
+  returntype.max_degC = pixel2degC(returntype.max);
+//  returntype.min_degC = pixel2degC((double)(roi.at<uint16_t>(returntype.min_point)));
+//  returntype.max_degC = pixel2degC((double)(roi.at<uint16_t>(returntype.max_point)));
 
-  ROS_INFO("min_deg = %f, max_deg = %f", returntype.min_degC, returntype.max_degC);
+//  ROS_INFO("min_deg = %f, max_deg = %f", returntype.min_degC, returntype.max_degC);
 
 //  ROS_INFO("min=%f,max=%f,minP=(%d,%d), maxP=(%d,%d)", minVal, maxVal,minPoint.x,minPoint.y,maxPoint.x,maxPoint.y);
 
@@ -55,7 +57,8 @@ minmaxloc_t my_flir::min_max_location(cv::Mat *img_, cv::Rect interestmask)
 
 double my_flir::pixel2degC(double val)
 {
-  return (val -27315) / 100.0;
+  ROS_INFO("val = %f", val);
+  return (val - 27315.0) / 100.0;
 }
 
 double my_flir::pixel2degF(double val)

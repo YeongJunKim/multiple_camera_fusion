@@ -36,12 +36,13 @@
 #include <iostream>
 #endif
 
-#define MODE_NONE           0
-#define MODE_ONLY_COLOR     1
-#define MODE_ONLY_THERMAL   2
-#define MODE_ONLY_LIDAR     3
-#define MODE_COLOR_THERMAL  4
-#define MODE_COLOR_LIDAR    5
+#define MODE_NONE               0
+#define MODE_ONLY_COLOR         1
+#define MODE_ONLY_THERMAL       2
+#define MODE_ONLY_LIDAR         3
+#define MODE_COLOR_THERMAL      4
+#define MODE_COLOR_LIDAR        5
+#define MODE_ONLY_THERMAL_GRAY  6
 
 /*****************************************************************************
 ** Namespaces
