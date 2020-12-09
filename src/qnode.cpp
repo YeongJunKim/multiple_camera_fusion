@@ -25,6 +25,7 @@ namespace enc = sensor_msgs::image_encodings;
 namespace imageView_example {
 bool isRecv = false;
 bool isIrRecv = false;
+bool is16IrRecv = false;
 bool isLidarRecv = false;
 
 int mode = MODE_ONLY_THERMAL;
@@ -54,11 +55,13 @@ bool QNode::init() {
     ros::start(); // explicitly needed since our nodehandle is going out of scope.
     ros::NodeHandle n;
     image_transport::ImageTransport it(n);
-        image_color_sub = it.subscribe("/camera/color/image_raw", 100, &QNode::imageCallback, this);
+//        image_color_sub = it.subscribe("/camera/color/image_raw", 100, &QNode::imageCallback, this);
+        image_color_sub = it.subscribe("/usb_cam/image_raw", 100, &QNode::imageCallback, this);
 //        image_lidar_sub = it.subscribe("/camera/depth/image_rect_raw", 100, &QNode::LidarImageCallback, this);
         image_lidar_sub = it.subscribe("/depth/out", 100, &QNode::LidarImageCallback, this);
 //        image_ir_sub = it.subscribe("/lepton/out", 100, &QNode::IrImageCallback, this);
         image_ir_sub = it.subscribe("/ir/usb_cam/image_raw", 100, &QNode::IrImageCallback, this);
+        image_ir_16bit_img_sub = it.subscribe("/lepton/out", 100, &QNode::Ir16bImageCallbcak, this);
     start();
     return true;
 }
@@ -105,11 +108,25 @@ void QNode::LidarImageCallback(const sensor_msgs::ImageConstPtr& msg_img)
   if(lidar_img_qnode == NULL && !isLidarRecv)
   {
 lidar_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img)->image);
-//      ROS_INFO("lidar : col %d, row %d", lidar_img_qnode->cols, lidar_img_qnode->rows);
       if(lidar_img_qnode != NULL)
       {
         isLidarRecv = true;
         Q_EMIT recvImgLidar();
+      }
+  }
+}
+
+void QNode::Ir16bImageCallbcak(const sensor_msgs::ImageConstPtr& msg_img)
+{
+  if(ir_16bit_img_qnode == NULL && !is16IrRecv)
+  {
+    ROS_INFO("16 ir1");
+      ir_16bit_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img)->image);
+      if(ir_16bit_img_qnode != NULL)
+      {
+        ROS_INFO("16 ir2");
+        is16IrRecv = true;
+        Q_EMIT recvImgIr16();
       }
   }
 }

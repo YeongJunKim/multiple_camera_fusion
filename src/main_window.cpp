@@ -25,6 +25,7 @@
 namespace imageView_example {
 extern bool isRecv;
 extern bool isIrRecv;
+extern bool is16IrRecv;
 extern bool isLidarRecv;
 extern int mode;
 
@@ -45,11 +46,13 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 
   if(qnode.img_qnode != NULL) qnode.img_qnode = NULL;
   if(qnode.ir_img_qnode != NULL) qnode.ir_img_qnode = NULL;
+  if(qnode.ir_16bit_img_qnode != NULL) qnode.ir_16bit_img_qnode = NULL;
   if(qnode.lidar_img_qnode != NULL) qnode.lidar_img_qnode = NULL;
 
   QObject::connect(&qnode, SIGNAL(recvImg()), this, SLOT(updateImg()));
   QObject::connect(&qnode, SIGNAL(recvImgIr()), this, SLOT(updateImgIr()));
   QObject::connect(&qnode, SIGNAL(recvImgLidar()), this, SLOT(updateImgLidar()));
+  QObject::connect(&qnode, SIGNAL(recvImgIr16()), this, SLOT(updateImgIr16()));
 
   connect(ui.labelOrg, SIGNAL(Mouse_Pos()), this, SLOT(Mouse_current_pos()));
   connect(ui.labelOrg, SIGNAL(Mouse_Pressed()), this, SLOT(Mouse_Pressed()));
@@ -66,7 +69,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 
   myModel = new QStandardItemModel(0,0,this);
   QStringList horzHeaders;
-  horzHeaders << "id" << "x1" << "y1" << "x2" << "y2" << "MAX_TH" << "MIN_TH";
+  horzHeaders << "id" << "x1" << "y1" << "x2" << "y2" << "MAX" << "MIN" << "MAX_x" << "MAX_y" << "MIN_x" << "MIN_y";
 
   myModel->setHorizontalHeaderLabels(horzHeaders);
 
@@ -80,6 +83,11 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
   //    myModel->setItem(0,0,item1);
   //    myModel->setItem(0,2,item2);
   //    myModel->setItem(2,0,item3);
+
+
+
+
+
   m_pTimer = make_shared<QTimer>();
   connect(m_pTimer.get(), SIGNAL(timeout()), this, SLOT(OnTimerCallbackFunction()));
   m_pTimer->start(100);
@@ -96,26 +104,18 @@ void MainWindow::updateImg()
   r = ui.lineEdit_color_roi_rightside->text().toInt();
   u = ui.lineEdit_color_roi_upperside->text().toInt();
   b = ui.lineEdit_color_roi_bottomside->text().toInt();
-
-
-
   int width  = ui.labelOrg->width();
   int height = ui.labelOrg->height();
   cv::resize(*qnode.img_qnode, dst, cv::Size(width,height),0,0,CV_INTER_NN);
-
   int x1,x2,y1,y2;
-  x1 = l;
-  y1 = u;
-  x2 = width - r;
-  y2 = height - b;
+  x1 = l;  y1 = u;  x2 = width - r;  y2 = height - b;
   cv::Rect bounds(0,0,width, height);
   cv::Rect intermask(cv::Point(x1,y1), cv::Point(x2,y2));
   roi = dst(intermask & bounds);
   cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
 
-  //    Mat imgOrg(*qnode.img_qnode); //qnode-> receive
   Mat imgOrg(output);
-  updateLabels(&imgOrg);
+  drawLabels(&imgOrg);
   if(!qnode.img_qnode->empty() && !imgOrg.empty() && isRecv)
   {
     if(mode == MODE_ONLY_COLOR)
@@ -130,65 +130,7 @@ void MainWindow::updateImg()
 }
 void MainWindow::updateImgIr()
 {
-  //  ROS_INFO("debug1");
-  cv::Mat dst, cvt,cvt2, th, roi, output, gray,grayout;
-
-
-
-  int l,r,u,b;
-  l = ui.lineEdit_IR_roi_leftside->text().toInt();
-  r = ui.lineEdit_IR_roi_rightside->text().toInt();
-  u = ui.lineEdit_IR_roi_upperside->text().toInt();
-  b = ui.lineEdit_IR_roi_bottomside->text().toInt();
-
-  int width  = ui.labelOrg->width();
-  int height = ui.labelOrg->height();
-  cv::resize(*qnode.ir_img_qnode, dst, cv::Size(width,height),0,0,CV_INTER_NN);
-
-
-//  int value = ui.horizontalSlider_threshold_thermal->value();
-//  double t = (double)map(value,0,100,0,255);
-//  cv::threshold(dst,th,t,65535,cv::THRESH_BINARY);
-
-//  cv::cvtColor(th, cvt2, cv::COLOR_GRAY2BGR);
-
-  int x1,x2,y1,y2;
-  x1 = l;
-  y1 = u;
-  x2 = width - r;
-  y2 = height - b;
-
-  cv::Rect bounds(0,0,width, height);
-  cv::Rect intermask(cv::Point(x1,y1), cv::Point(x2,y2));
-  roi = dst(intermask & bounds);
-  cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
-
-  cv::cvtColor(output,gray,CV_BGR2GRAY);
-  cv::cvtColor(gray,grayout,CV_GRAY2BGR);
-
-  if(mode == MODE_ONLY_THERMAL)
-  {
-    Mat imgOrg(output);
-    updateLabels(&imgOrg);
-    if(!qnode.ir_img_qnode->empty() && !imgOrg.empty() && isIrRecv)
-    {
-      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
-      ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg.rgbSwapped()));
-    }
-  }
-  else if(mode == MODE_ONLY_THERMAL_GRAY)
-  {
-    Mat imgOrg(grayout);
-    updateLabels(&imgOrg);
-    if(!qnode.ir_img_qnode->empty() && !imgOrg.empty() && isIrRecv)
-    {
-      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
-      ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg.rgbSwapped()));
-    }
-  }
-  delete qnode.ir_img_qnode;
-  if(qnode.ir_img_qnode != NULL) qnode.ir_img_qnode = NULL;
-  isIrRecv = false;
+  ROS_INFO("debug1");
 }
 
 void MainWindow::updateImgLidar()
@@ -229,6 +171,45 @@ void MainWindow::updateImgLidar()
   delete qnode.lidar_img_qnode;
   if(qnode.lidar_img_qnode != NULL) qnode.lidar_img_qnode = NULL;
   isLidarRecv = false;
+}
+
+void MainWindow::updateImgIr16()
+{
+  ROS_INFO("hello");
+  cv::Mat get(*qnode.ir_16bit_img_qnode);
+  cv::Mat dst, norm, t8, roi, output;
+
+
+  int l,r,u,b;
+  l = ui.lineEdit_IR_roi_leftside->text().toInt();
+  r = ui.lineEdit_IR_roi_rightside->text().toInt();
+  u = ui.lineEdit_IR_roi_upperside->text().toInt();
+  b = ui.lineEdit_IR_roi_bottomside->text().toInt();
+  int width = ui.labelOrg->width();
+  int height = ui.labelOrg->height();
+  cv::resize(get, dst, cv::Size(width,height),0,0,CV_INTER_NN);
+  int x1,x2,y1,y2;
+  x1 = l;  y1 = u;  x2 = width - r;  y2 = height - b;
+  cv::Rect bounds(0,0,width, height);
+  cv::Rect intermask(cv::Point(x1,y1), cv::Point(x2,y2));
+  roi = dst(intermask & bounds);
+  cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
+
+
+  cv::Mat color = updateLabelsGray(&output);
+
+  Mat imgOrg(color);
+  if(!qnode.ir_16bit_img_qnode->empty() && !imgOrg.empty() && is16IrRecv)
+  {
+    if(mode == MODE_COLOR_THERMAL)
+    {
+      QImage qimageOrg((const unsigned char*)(imgOrg.data), imgOrg.cols, imgOrg.rows, QImage::Format_RGB888);
+      ui.labelOrg->setPixmap(QPixmap::fromImage(qimageOrg));
+    }
+  }
+  delete qnode.ir_16bit_img_qnode;
+  if(qnode.ir_16bit_img_qnode != NULL) qnode.ir_16bit_img_qnode = NULL;
+  is16IrRecv = false;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -478,33 +459,28 @@ void imageView_example::MainWindow::on_button_delete_id_clicked()
   }
 }
 
+
+
 void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
+{
+}
+void imageView_example::MainWindow::drawLabels(Mat *img_)
 {
   cv::Mat *img;
   img = img_;
-  //get tablerowsize
-  int rows = ui.tableView->model()->rowCount();
-
-
-  if(this->button_flag == 0)
-  {
+  if(this->button_flag == 0) {
     int x1,x2,y1,y2;
     x1 = ui.lineEdit_x1->text().toInt();
     y1 = ui.lineEdit_y1->text().toInt();
     x2 = ui.lineEdit_x2->text().toInt();
     y2 = ui.lineEdit_y2->text().toInt();
     if(x1 * x2 * y1 * y2 == 0)
-    {
-
-    }
-    else
-    {
+    {}
+    else {
       rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(255,0,0),3,4,0);
     }
   }
-
-  if(this->button_flag == 2)
-  {
+  if(this->button_flag == 2) {
     int x1,x2,y1,y2;
     x1 = ui.lineEdit_x1->text().toInt();
     y1 = ui.lineEdit_y1->text().toInt();
@@ -513,32 +489,99 @@ void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
     rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(255,0,0),3,4,0);
   }
 
-  if(rows == 0)
-    return;
-  for(int i = 0; i < rows; i++)
+  int rows = ui.tableView->model()->rowCount();
+
+  if (rows > 0)
   {
-    int x1, x2, y1, y2;
-    int id = ui.tableView->model()->index(i,0).data().toInt();
-    x1 = ui.tableView->model()->index(i,1).data().toInt();
-    y1 = ui.tableView->model()->index(i,2).data().toInt();
-    x2 = ui.tableView->model()->index(i,3).data().toInt();
-    y2 = ui.tableView->model()->index(i,4).data().toInt();
-    if(mode == MODE_ONLY_THERMAL)
-    {
-      my_flir flir;
+    for(int i = 0; i < rows; i++) {
+      int x1, x2, y1, y2;
+      int id = ui.tableView->model()->index(i,0).data().toInt();
+      x1 = ui.tableView->model()->index(i,1).data().toInt();
+      y1 = ui.tableView->model()->index(i,2).data().toInt();
+      x2 = ui.tableView->model()->index(i,3).data().toInt();
+      y2 = ui.tableView->model()->index(i,4).data().toInt();
+      cv::rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
+      cv::putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0),1);
+
       minmaxloc_t mmloc;
-      mmloc = flir.min_max_location(img, Rect(Point(x1,y1),Point(x2,y2)));
+      mmloc.max_point = cv::Point(ui.tableView->model()->index(i,7).data().toInt(),ui.tableView->model()->index(i,8).data().toInt());
+      mmloc.min_point = cv::Point(ui.tableView->model()->index(i,9).data().toInt(),ui.tableView->model()->index(i,10).data().toInt());
       cv::circle(*img,mmloc.min_point,5,Scalar(255,0,0),3,4,0);
       cv::circle(*img,mmloc.max_point,5,Scalar(0,0,255),3,4,0);
+    }
+  }
+}
 
+cv::Mat imageView_example::MainWindow::updateLabelsGray(Mat *gray_)
+{
+  cv::Mat *img;
+  cv::Mat norm, t8, color;
+  img = gray_;
+  cv::normalize(*img,norm,0,255, NORM_MINMAX);
+  norm.convertTo(t8, CV_8UC1);
+  cv::cvtColor(t8,color,cv::COLOR_GRAY2BGR);
+
+  if(this->button_flag == 0) {
+    int x1,x2,y1,y2;
+    x1 = ui.lineEdit_x1->text().toInt();
+    y1 = ui.lineEdit_y1->text().toInt();
+    x2 = ui.lineEdit_x2->text().toInt();
+    y2 = ui.lineEdit_y2->text().toInt();
+    if(x1 * x2 * y1 * y2 == 0)
+    {}
+    else {
+      rectangle(color,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,0,255),3,4,0);
+    }
+  }
+  if(this->button_flag == 2) {
+    int x1,x2,y1,y2;
+    x1 = ui.lineEdit_x1->text().toInt();
+    y1 = ui.lineEdit_y1->text().toInt();
+    x2 = ui.labelOrg->x;
+    y2 = ui.labelOrg->y;
+    rectangle(color,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,0,255),3,4,0);
+  }
+
+  int rows = ui.tableView->model()->rowCount();
+
+  if (rows == 0)
+  {
+
+  }
+  else
+  {
+    for(int i = 0; i < rows; i++) {
+      int x1, x2, y1, y2;
+      int id = ui.tableView->model()->index(i,0).data().toInt();
+      x1 = ui.tableView->model()->index(i,1).data().toInt();
+      y1 = ui.tableView->model()->index(i,2).data().toInt();
+      x2 = ui.tableView->model()->index(i,3).data().toInt();
+      y2 = ui.tableView->model()->index(i,4).data().toInt();
+
+      my_flir flir;
+      minmaxloc_t mmloc;
+      mmloc = flir.min_max_location_gray(img, Rect(Point(x1,y1),Point(x2,y2)));
+      cv::circle(color,mmloc.min_point,5,Scalar(0,0,255),3,4,0);
+      cv::circle(color,mmloc.max_point,5,Scalar(255,0,0),3,4,0);
       QStandardItem *max = new QStandardItem(QString::number(mmloc.max_degC));
       QStandardItem *min = new QStandardItem(QString::number(mmloc.min_degC));
+      QStandardItem *max_x = new QStandardItem(QString::number(mmloc.max_point.x));
+      QStandardItem *max_y = new QStandardItem(QString::number(mmloc.max_point.y));
+      QStandardItem *min_x = new QStandardItem(QString::number(mmloc.min_point.x));
+      QStandardItem *min_y = new QStandardItem(QString::number(mmloc.min_point.y));
       myModel->setItem(i,5,max);
       myModel->setItem(i,6,min);
+      myModel->setItem(i,7,max_x);
+      myModel->setItem(i,8,max_y);
+      myModel->setItem(i,9,min_x);
+      myModel->setItem(i,10,min_y);
+      cv::rectangle(color,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
+      cv::putText(color,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0),1);
     }
-    rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
-    putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0),1);
   }
+
+
+  return color;
 }
 
 void imageView_example::MainWindow::updateImage(cv::Mat *img_)
@@ -564,7 +607,84 @@ void MainWindow::OnTimerCallbackFunction()
   // check thermal in labels
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void imageView_example::MainWindow::on_horizontalSlider_color_leftside_sliderMoved(int position)
+{
+  ui.lineEdit_color_roi_leftside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_color_rightside_sliderMoved(int position)
+{
+  ui.lineEdit_color_roi_rightside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_color_upperside_sliderMoved(int position)
+{
+  ui.lineEdit_color_roi_upperside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_color_bottomside_sliderMoved(int position)
+{
+  ui.lineEdit_color_roi_bottomside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_IR_leftside_sliderMoved(int position)
+{
+  ui.lineEdit_IR_roi_leftside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_IR_rightside_sliderMoved(int position)
+{
+  ui.lineEdit_IR_roi_rightside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_IR_upperside_sliderMoved(int position)
+{
+  ui.lineEdit_IR_roi_upperside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_IR_bottomside_sliderMoved(int position)
+{
+  ui.lineEdit_IR_roi_bottomside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_depth_leftside_sliderMoved(int position)
+{
+  ui.lineEdit_depth_roi_leftside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_depth_rightside_sliderMoved(int position)
+{
+  ui.lineEdit_depth_roi_rightside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_depth_upperrside_sliderMoved(int position)
+{
+  ui.lineEdit_depth_roi_upperside->setText(QString::number(position));
+}
+void imageView_example::MainWindow::on_horizontalSlider_depth_bottomside_sliderMoved(int position)
+{
+  ui.lineEdit_depth_roi_bottomside->setText(QString::number(position));
+}
 }  // namespace imageView_example
+
+
 
 
 

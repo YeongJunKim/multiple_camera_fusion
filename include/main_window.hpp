@@ -48,6 +48,7 @@ public Q_SLOTS:
         void updateImg();
         void updateImgIr();
         void updateImgLidar();
+        void updateImgIr16();
 
 //private slots:
         void on_button_update_clicked();
@@ -78,18 +79,30 @@ public Q_SLOTS:
 
         float map(float value, float istart, float istop, float ostart, float ostop);
 
-
         void Mouse_current_pos();
         void Mouse_Pressed();
         void Mouse_Released();
         void Mouse_left();
 
-
         void updateLabels(cv::Mat *img_);
+        void drawLabels(Mat *img_);
+        cv::Mat updateLabelsGray(cv::Mat *gray_);
+
         void updateImage(cv::Mat *img_);
         void OnTimerCallbackFunction();
 
-
+        void on_horizontalSlider_color_bottomside_sliderMoved(int position);
+        void on_horizontalSlider_color_upperside_sliderMoved(int position);
+        void on_horizontalSlider_color_rightside_sliderMoved(int position);
+        void on_horizontalSlider_color_leftside_sliderMoved(int position);
+        void on_horizontalSlider_depth_bottomside_sliderMoved(int position);
+        void on_horizontalSlider_depth_upperrside_sliderMoved(int position);
+        void on_horizontalSlider_depth_rightside_sliderMoved(int position);
+        void on_horizontalSlider_depth_leftside_sliderMoved(int position);
+        void on_horizontalSlider_IR_bottomside_sliderMoved(int position);
+        void on_horizontalSlider_IR_upperside_sliderMoved(int position);
+        void on_horizontalSlider_IR_rightside_sliderMoved(int position);
+        void on_horizontalSlider_IR_leftside_sliderMoved(int position);
 
 private:
 	Ui::MainWindowDesign ui;

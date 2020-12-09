@@ -65,11 +65,13 @@ public:
     cv::Mat *img_qnode;
     cv::Mat *ir_img_qnode;
     cv::Mat *lidar_img_qnode;
+    cv::Mat *ir_16bit_img_qnode;
 
 Q_SIGNALS:
     void recvImg();
     void recvImgIr();
     void recvImgLidar();
+    void recvImgIr16();
     void rosShutdown();
 private:
     int init_argc;
@@ -77,11 +79,13 @@ private:
 
     image_transport::Subscriber image_color_sub;
     image_transport::Subscriber image_ir_sub;
+    image_transport::Subscriber image_ir_16bit_img_sub;
     image_transport::Subscriber image_lidar_sub;
 
     void imageCallback(const sensor_msgs::ImageConstPtr &msg_img);
     void IrImageCallback(const sensor_msgs::ImageConstPtr& msg_img);
     void LidarImageCallback(const sensor_msgs::ImageConstPtr& msg_img);
+    void Ir16bImageCallbcak(const sensor_msgs::ImageConstPtr& msg_img);
 };
 
 }  // namespace imageView_example

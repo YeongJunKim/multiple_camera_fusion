@@ -44,7 +44,8 @@ public:
 
   void display(cv::Mat *img, cv::Rect rect, cv::Scalar scalar, int thickness, int linetype, int shift);
 
-  minmaxloc_t min_max_location(cv::Mat *img_, cv::Rect interestmask);
+  minmaxloc_t min_max_location_rgb(cv::Mat *img_, cv::Rect interestmask);
+  minmaxloc_t min_max_location_gray(cv::Mat *img_, cv::Rect interestmask);
 
   double pixel2degC(double val);
   double pixel2degF(double val);
