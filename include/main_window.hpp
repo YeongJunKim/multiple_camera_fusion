@@ -20,6 +20,7 @@
 #include <my_qlabel.h>
 #include <QStandardItemModel>
 #include <QTimer>
+#include <QSlider>
 /*****************************************************************************
 ** Namespace
 *****************************************************************************/
@@ -62,10 +63,6 @@ public Q_SLOTS:
         void on_checkBox_only_lidar_clicked();
 
         void on_checkBox_only_thermal_clicked();
-
-        void on_horizontalSlider_threshold_thermal_sliderMoved(int position);
-
-        void on_horizontalSlider_threshold_distance_sliderMoved(int position);
 
         void on_button_select_position_clicked();
 

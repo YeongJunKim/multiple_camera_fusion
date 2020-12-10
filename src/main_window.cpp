@@ -59,13 +59,18 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
   connect(ui.labelOrg, SIGNAL(Mouse_Left()), this, SLOT(Mouse_left()));
   connect(ui.labelOrg, SIGNAL(Mouse_Released()),this, SLOT(Mouse_Released()));
 
-
-  int value = ui.horizontalSlider_threshold_thermal->value();
-  QString qstr = QString::number(value);
-  ui.lineEdit->setText(qstr);
-  value = ui.horizontalSlider_threshold_distance->value();
-  QString qstr2 = QString::number(value);
-  ui.lineEdit_2->setText(qstr2);
+  ui.horizontalSlider_IR_leftside->setValue(ui.lineEdit_IR_roi_leftside->text().toInt());
+  ui.horizontalSlider_IR_rightside->setValue(ui.lineEdit_IR_roi_rightside->text().toInt());
+  ui.horizontalSlider_IR_upperside->setValue(ui.lineEdit_IR_roi_upperside->text().toInt());
+  ui.horizontalSlider_IR_bottomside->setValue(ui.lineEdit_IR_roi_bottomside->text().toInt());
+  ui.horizontalSlider_depth_leftside->setValue(ui.lineEdit_depth_roi_leftside->text().toInt());
+  ui.horizontalSlider_depth_rightside->setValue(ui.lineEdit_depth_roi_rightside->text().toInt());
+  ui.horizontalSlider_depth_upperrside->setValue(ui.lineEdit_depth_roi_upperside->text().toInt());
+  ui.horizontalSlider_depth_bottomside->setValue(ui.lineEdit_depth_roi_bottomside->text().toInt());
+  ui.horizontalSlider_color_leftside->setValue(ui.lineEdit_color_roi_leftside->text().toInt());
+  ui.horizontalSlider_color_rightside->setValue(ui.lineEdit_color_roi_rightside->text().toInt());
+  ui.horizontalSlider_color_upperside->setValue(ui.lineEdit_color_roi_upperside->text().toInt());
+  ui.horizontalSlider_color_bottomside->setValue(ui.lineEdit_color_roi_bottomside->text().toInt());
 
   myModel = new QStandardItemModel(0,0,this);
   QStringList horzHeaders;
@@ -151,15 +156,7 @@ void MainWindow::updateImgLidar()
   cv::Rect bounds(0,0+offset1,temp.cols,576+offset1-offset2);
   Mat roi = temp(bounds);
   cv::resize(roi, dst, cv::Size(width,height),0,0,CV_INTER_NN);
-  cv::Mat th;
-  cv::Mat gray;
-  cv::Mat step1;
-  cv::Mat cvt;
-  int value = ui.horizontalSlider_threshold_distance->value();
-  double t = (double)map(value,0,100,0,255);
-  cv::threshold(dst,th,t,65535,cv::THRESH_BINARY);
-  cv::cvtColor(th, cvt, cv::COLOR_GRAY2BGR);
-  Mat imgOrg(cvt);
+  Mat imgOrg(dst);
   if(!qnode.lidar_img_qnode->empty() && !imgOrg.empty() && isLidarRecv)
   {
     if(mode == MODE_ONLY_LIDAR)
@@ -312,23 +309,6 @@ void imageView_example::MainWindow::on_checkBox_gray_thermal_clicked()
   mode = MODE_ONLY_THERMAL_GRAY;
   ROS_INFO("MODE_ONLY_THERMAL_GRAY");
 }
-
-void imageView_example::MainWindow::on_horizontalSlider_threshold_thermal_sliderMoved(int position)
-{
-  int value = ui.horizontalSlider_threshold_thermal->value();
-  QString qstr = QString::number(value);
-  ui.lineEdit->setText(qstr);
-  ROS_INFO("value : %d", value);
-}
-
-void imageView_example::MainWindow::on_horizontalSlider_threshold_distance_sliderMoved(int position)
-{
-  int value = ui.horizontalSlider_threshold_distance->value();
-  QString qstr = QString::number(value);
-  ui.lineEdit_2->setText(qstr);
-  ROS_INFO("value : %d", value);
-}
-
 
 
 float imageView_example::MainWindow::map(float value, float istart, float istop, float ostart, float ostop) {

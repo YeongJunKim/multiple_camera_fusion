@@ -69,10 +69,46 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="checkBox_gray_thermal">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>temp</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="checkBox_only_lidar">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Depth</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QCheckBox" name="checkBox_only_color">
          <property name="text">
-          <string>Only Color</string>
+          <string>Color</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="checkBox_only_thermal">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>temp</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -80,33 +116,35 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QCheckBox" name="checkBox_only_thermal">
+        <widget class="QCheckBox" name="checkBox_thermal">
          <property name="text">
-          <string>Only Thermal</string>
+          <string>Thermal</string>
          </property>
          <property name="checked">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="checkBox_only_lidar">
-         <property name="text">
-          <string>Only Lidar</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_thermal">
+        <widget class="QCheckBox" name="checkBox_lidar">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
-          <string>Thermal</string>
+          <string>temp</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QCheckBox" name="checkBox_lidar">
+        <widget class="QCheckBox" name="checkBox_lidar_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
-          <string>Lidar</string>
+          <string>temp</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -114,9 +152,25 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QCheckBox" name="checkBox_gray_thermal">
+        <widget class="QCheckBox" name="checkBox_lidar_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
-          <string>Thermal Gray</string>
+          <string>temp</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="checkBox_lidar_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>temp</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -138,124 +192,6 @@
        <string>Setting</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>160</y>
-        <width>113</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>150</y>
-        <width>521</width>
-        <height>84</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="3" column="0">
-        <widget class="QSlider" name="horizontalSlider_threshold_distance">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QSlider" name="horizontalSlider_threshold_thermal">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_threshold_thermal">
-         <property name="text">
-          <string>Threshold Thermal (C)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_threshold_disatnce">
-         <property name="text">
-          <string>Threshold Distance (m)</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>210</y>
-        <width>113</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_color_roi_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>310</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>leftside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_color_roi_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>310</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>rightside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_color_roi_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>310</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>upperside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_color_roi_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>310</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>bottomside:</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_roi_setting">
       <property name="geometry">
        <rect>
@@ -269,571 +205,362 @@
        <string>ROI setting</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_color_view">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>280</y>
-        <width>81</width>
-        <height>17</height>
+        <width>651</width>
+        <height>290</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Color View</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_color_roi_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>330</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>50</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_color_roi_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>330</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>150</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_color_roi_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>330</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>100</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_color_roi_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>330</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_IR_roi_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>460</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_IR_roi_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>440</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>rightside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_IR_view">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>410</y>
-        <width>81</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>IR View</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_IR_roi_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>440</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>upperside:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_IR_roi_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>460</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_IR_roi_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>440</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>bottomside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_IR_roi_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>440</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>leftside:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_IR_roi_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>460</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>100</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_IR_roi_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>460</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_depth_roi_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>570</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>leftside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_depth_roi_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>570</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>upperside:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_depth_roi_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>590</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_depth_roi_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>590</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_depth_roi_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>570</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>bottomside:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_depth_view">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>540</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Depth View</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_depth_roi_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>590</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_depth_roi_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>570</y>
-        <width>91</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>rightside:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_depth_roi_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>590</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="button_color_roi_set">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>330</y>
-        <width>80</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>set</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="button_IR_roi_set">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>460</y>
-        <width>80</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>set</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="button_depth_roi_set">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>590</y>
-        <width>80</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>set</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_color_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>360</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_color_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>360</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_color_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>360</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_color_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>360</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_IR_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>490</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_IR_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>490</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_IR_upperside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>490</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_IR_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>490</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_depth_leftside">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>620</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_depth_rightside">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>620</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_depth_upperrside">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>620</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider_depth_bottomside">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>620</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_depth_view">
+         <property name="text">
+          <string>Depth View</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSlider" name="horizontalSlider_color_rightside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QLineEdit" name="lineEdit_depth_roi_upperside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLineEdit" name="lineEdit_IR_roi_leftside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="QLineEdit" name="lineEdit_IR_roi_bottomside">
+         <property name="text">
+          <string>100</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="QSlider" name="horizontalSlider_depth_rightside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="QLabel" name="label_IR_roi_bottomside">
+         <property name="text">
+          <string>bottomside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="label_color_roi_rightside">
+         <property name="text">
+          <string>rightside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLabel" name="label_IR_roi_rightside">
+         <property name="text">
+          <string>rightside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QSlider" name="horizontalSlider_IR_leftside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="QSlider" name="horizontalSlider_IR_bottomside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="3">
+        <widget class="QLineEdit" name="lineEdit_depth_roi_bottomside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QLabel" name="label_depth_roi_rightside">
+         <property name="text">
+          <string>rightside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QSlider" name="horizontalSlider_color_upperside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_IR_roi_leftside">
+         <property name="text">
+          <string>leftside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_color_roi_rightside">
+         <property name="text">
+          <string>150</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QSlider" name="horizontalSlider_depth_upperrside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLineEdit" name="lineEdit_color_roi_leftside">
+         <property name="text">
+          <string>50</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_IR_view">
+         <property name="text">
+          <string>IR View</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QLineEdit" name="lineEdit_IR_roi_upperside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QLabel" name="label_depth_roi_upperside">
+         <property name="text">
+          <string>upperside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QSlider" name="horizontalSlider_color_bottomside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLabel" name="label_color_roi_bottomside">
+         <property name="text">
+          <string>bottomside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="label_IR_roi_upperside">
+         <property name="text">
+          <string>upperside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QLabel" name="label_depth_roi_bottomside">
+         <property name="text">
+          <string>bottomside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QSlider" name="horizontalSlider_color_leftside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_color_roi_upperside">
+         <property name="text">
+          <string>upperside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="3">
+        <widget class="QSlider" name="horizontalSlider_depth_bottomside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLineEdit" name="lineEdit_color_roi_bottomside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_color_view">
+         <property name="text">
+          <string>Color View</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QSlider" name="horizontalSlider_depth_leftside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_color_roi_leftside">
+         <property name="text">
+          <string>leftside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="lineEdit_IR_roi_rightside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QLineEdit" name="lineEdit_depth_roi_rightside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSlider" name="horizontalSlider_IR_rightside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_depth_roi_leftside">
+         <property name="text">
+          <string>leftside:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLineEdit" name="lineEdit_depth_roi_leftside">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QSlider" name="horizontalSlider_IR_upperside">
+         <property name="maximum">
+          <number>200</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="lineEdit_color_roi_upperside">
+         <property name="text">
+          <string>100</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_Labeling">
