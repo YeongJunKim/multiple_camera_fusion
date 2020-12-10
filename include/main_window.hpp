@@ -44,6 +44,9 @@ public:
 
 	void closeEvent(QCloseEvent *event); // Overloaded function
 
+  uint32_t nowTick;
+  uint32_t pastTick;
+  int blinkflag = 0;
 
 public Q_SLOTS:
         void updateImg();
@@ -82,8 +85,10 @@ public Q_SLOTS:
         void Mouse_left();
 
         void updateLabels(cv::Mat *img_);
-        void drawLabels(Mat *img_);
+        void drawLabels(Mat *img_, int order);
+
         cv::Mat updateLabelsGray(cv::Mat *gray_);
+
 
         void updateImage(cv::Mat *img_);
         void OnTimerCallbackFunction();
@@ -100,6 +105,7 @@ public Q_SLOTS:
         void on_horizontalSlider_IR_upperside_sliderMoved(int position);
         void on_horizontalSlider_IR_rightside_sliderMoved(int position);
         void on_horizontalSlider_IR_leftside_sliderMoved(int position);
+
 
 private:
 	Ui::MainWindowDesign ui;

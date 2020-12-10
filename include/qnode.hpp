@@ -67,6 +67,9 @@ public:
     cv::Mat *lidar_img_qnode;
     cv::Mat *ir_16bit_img_qnode;
 
+    image_transport::Publisher image_ir_pub;
+    image_transport::Publisher image_color_pub;
+    image_transport::Publisher image_depth_pub;
 Q_SIGNALS:
     void recvImg();
     void recvImgIr();

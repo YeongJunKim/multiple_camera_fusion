@@ -74,7 +74,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 
   myModel = new QStandardItemModel(0,0,this);
   QStringList horzHeaders;
-  horzHeaders << "id" << "x1" << "y1" << "x2" << "y2" << "MAX" << "MIN" << "MAX_x" << "MAX_y" << "MIN_x" << "MIN_y";
+  horzHeaders << "id" << "x1" << "y1" << "x2" << "y2" << "MAX" << "MIN" << "MAX_x" << "MAX_y" << "MIN_x" << "MIN_y" << "threshold";
 
   myModel->setHorizontalHeaderLabels(horzHeaders);
 
@@ -120,7 +120,12 @@ void MainWindow::updateImg()
   cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
 
   Mat imgOrg(output);
-  drawLabels(&imgOrg);
+  drawLabels(&imgOrg,1);
+
+  sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8",imgOrg).toImageMsg();
+  qnode.image_color_pub.publish(msg);
+
+
   if(!qnode.img_qnode->empty() && !imgOrg.empty() && isRecv)
   {
     if(mode == MODE_ONLY_COLOR)
@@ -141,22 +146,44 @@ void MainWindow::updateImgIr()
 void MainWindow::updateImgLidar()
 {
   //  ROS_INFO("update IR");
-  cv::Mat dst;
+  cv::Mat dst, roi, output;
   Mat temp(*qnode.lidar_img_qnode);
 
+  int l,r,u,b;
+  l = ui.lineEdit_depth_roi_leftside->text().toInt();
+  r = ui.lineEdit_depth_roi_rightside->text().toInt();
+  u = ui.lineEdit_depth_roi_upperside->text().toInt();
+  b = ui.lineEdit_depth_roi_bottomside->text().toInt();
   int width = ui.labelOrg->width();
   int height = ui.labelOrg->height();
+  int x1,x2,y1,y2;
+  x1 = l;  y1 = u;  x2 = width - r;  y2 = height - b;
+  cv::Rect bounds(0,0,width, height);
+  cv::Rect intermask(cv::Point(x1,y1), cv::Point(x2,y2));
+
+
+
+
+
+  cv::resize(*qnode.lidar_img_qnode, dst, cv::Size(width,height),0,0,CV_INTER_NN);
+  roi = dst(intermask & bounds);
+  cv::resize(roi, output, cv::Size(width,height),0,0,CV_INTER_NN);
   // 1920 1080
   // 1024 768
   // width height
   // 1920:1080=width:x
   // 1080 * 1024 /1920 = 576
-  int offset1 = 30;
-  int offset2 =10;
-  cv::Rect bounds(0,0+offset1,temp.cols,576+offset1-offset2);
-  Mat roi = temp(bounds);
-  cv::resize(roi, dst, cv::Size(width,height),0,0,CV_INTER_NN);
-  Mat imgOrg(dst);
+  cv::Mat norm, color, t8;
+  cv::normalize(output,norm,0,255,NORM_MINMAX);
+  norm.convertTo(t8, CV_8UC1);
+  cv::cvtColor(t8,color, cv::COLOR_GRAY2RGB);
+  Mat imgOrg(color);
+  drawLabels(&imgOrg,0);
+
+
+  sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "rgb8",imgOrg).toImageMsg();
+  qnode.image_depth_pub.publish(msg);
+
   if(!qnode.lidar_img_qnode->empty() && !imgOrg.empty() && isLidarRecv)
   {
     if(mode == MODE_ONLY_LIDAR)
@@ -194,8 +221,13 @@ void MainWindow::updateImgIr16()
 
 
   cv::Mat color = updateLabelsGray(&output);
+  drawLabels(&color,0);
+
+
 
   Mat imgOrg(color);
+  sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "rgb8",imgOrg).toImageMsg();
+  qnode.image_ir_pub.publish(msg);
   if(!qnode.ir_16bit_img_qnode->empty() && !imgOrg.empty() && is16IrRecv)
   {
     if(mode == MODE_COLOR_THERMAL)
@@ -375,11 +407,13 @@ void imageView_example::MainWindow::on_button_manually_add_clicked()
   QList<QStandardItem*> items;
   int id = rand()%1000;
   int x1,y1,x2,y2;
-
+  double th;
   int x1_ = ui.lineEdit_x1->text().toInt();
   int y1_ = ui.lineEdit_y1->text().toInt();
   int x2_ = ui.lineEdit_x2->text().toInt();
   int y2_ = ui.lineEdit_y2->text().toInt();
+  th = ui.lineEdit_threshold->text().toDouble();
+
 
   if(x1_ > x2_)
   {
@@ -390,7 +424,6 @@ void imageView_example::MainWindow::on_button_manually_add_clicked()
       x1 = x1_;
       x2 = x2_;
   }
-
   if(y1_ > y2_)
   {
     y1 = y2_;
@@ -403,17 +436,19 @@ void imageView_example::MainWindow::on_button_manually_add_clicked()
   }
 
   items.append(new QStandardItem(QString::number(id)));
-//  items.append(new QStandardItem(ui.lineEdit_x1->text()));
-//  items.append(new QStandardItem(ui.lineEdit_y1->text()));
-//  items.append(new QStandardItem(ui.lineEdit_x2->text()));
-//  items.append(new QStandardItem(ui.lineEdit_y2->text()));
-
   items.append(new QStandardItem(QString::number(x1)));
   items.append(new QStandardItem(QString::number(y1)));
   items.append(new QStandardItem(QString::number(x2)));
   items.append(new QStandardItem(QString::number(y2)));
-
+  items.append(new QStandardItem(QString::number(0)));
+  items.append(new QStandardItem(QString::number(0)));
+  items.append(new QStandardItem(QString::number(0)));
+  items.append(new QStandardItem(QString::number(0)));
+  items.append(new QStandardItem(QString::number(0)));
+  items.append(new QStandardItem(QString::number(0)));
+  items.append(new QStandardItem(QString::number(th)));
   myModel->appendRow(items);
+
 
   ui.tableView->resizeColumnsToContents();
   ui.tableView->resizeRowsToContents();
@@ -444,8 +479,37 @@ void imageView_example::MainWindow::on_button_delete_id_clicked()
 void imageView_example::MainWindow::updateLabels(cv::Mat *img_)
 {
 }
-void imageView_example::MainWindow::drawLabels(Mat *img_)
+void imageView_example::MainWindow::drawLabels(Mat *img_, int order)
 {
+  double secs = ros::Time::now().toSec();
+  nowTick = static_cast<uint32_t>(secs * 1000.0);
+  ROS_INFO("nowTick = %d, pastTick = %d", nowTick, pastTick);
+  if(nowTick - pastTick > 100)
+  {
+    if(blinkflag == 0)
+      blinkflag = 1;
+    else
+      blinkflag = 0;
+    pastTick = nowTick;
+  }
+
+  Scalar *bluelabel;
+  Scalar *redlabel;
+  Scalar *thermalColor;
+  Scalar *blacklabel = new Scalar(0,0,0);
+
+  if(order == 0)
+  {
+    bluelabel = new Scalar(0,0,255);
+    redlabel = new Scalar(255,0,0);
+    thermalColor = new Scalar(100,0,50);
+  }
+  else
+  {
+    bluelabel = new Scalar(255,0,0);
+    redlabel = new Scalar(0,0,255);
+    thermalColor = new Scalar(50,0,100);
+  }
   cv::Mat *img;
   img = img_;
   if(this->button_flag == 0) {
@@ -457,7 +521,7 @@ void imageView_example::MainWindow::drawLabels(Mat *img_)
     if(x1 * x2 * y1 * y2 == 0)
     {}
     else {
-      rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(255,0,0),3,4,0);
+      rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),*bluelabel,3,4,0);
     }
   }
   if(this->button_flag == 2) {
@@ -466,7 +530,7 @@ void imageView_example::MainWindow::drawLabels(Mat *img_)
     y1 = ui.lineEdit_y1->text().toInt();
     x2 = ui.labelOrg->x;
     y2 = ui.labelOrg->y;
-    rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(255,0,0),3,4,0);
+    rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),*bluelabel,3,4,0);
   }
 
   int rows = ui.tableView->model()->rowCount();
@@ -480,14 +544,39 @@ void imageView_example::MainWindow::drawLabels(Mat *img_)
       y1 = ui.tableView->model()->index(i,2).data().toInt();
       x2 = ui.tableView->model()->index(i,3).data().toInt();
       y2 = ui.tableView->model()->index(i,4).data().toInt();
-      cv::rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
-      cv::putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0),1);
+      int max_x = ui.tableView->model()->index(i,7).data().toInt();
+      int max_y = ui.tableView->model()->index(i,8).data().toInt();
+      int min_x = ui.tableView->model()->index(i,9).data().toInt();
+      int min_y = ui.tableView->model()->index(i,10).data().toInt();
+
+
+      double max_deg, min_deg, th;
+      max_deg = ui.tableView->model()->index(i,5).data().toDouble();
+      min_deg = ui.tableView->model()->index(i,6).data().toDouble();
+      th = ui.tableView->model()->index(i,11).data().toDouble();
+      ROS_INFO("max = %f, th = %f", max_deg,th);
+      if(max_deg > th)
+      {
+        if(blinkflag)
+          cv::rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),*redlabel,3,4,0);
+        else
+          cv::rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),*blacklabel,3,4,0);
+      }
+      else
+      {
+        cv::rectangle(*img,Rect(Point(x1,y1),Point(x2,y2)),Scalar(0,255,0),3,4,0);
+      }
+
+
+      cv::putText(*img,to_string(id), Point(x1, y1), FONT_HERSHEY_SIMPLEX, 1, Scalar(0,0,0),3);
+      cv::putText(*img,to_string(max_deg), Point(max_x, max_y), FONT_HERSHEY_SIMPLEX, 1,*thermalColor,3);
+      cv::putText(*img,to_string(min_deg), Point(min_x, min_y), FONT_HERSHEY_SIMPLEX, 1,*thermalColor,3);
 
       minmaxloc_t mmloc;
       mmloc.max_point = cv::Point(ui.tableView->model()->index(i,7).data().toInt(),ui.tableView->model()->index(i,8).data().toInt());
       mmloc.min_point = cv::Point(ui.tableView->model()->index(i,9).data().toInt(),ui.tableView->model()->index(i,10).data().toInt());
-      cv::circle(*img,mmloc.min_point,5,Scalar(255,0,0),3,4,0);
-      cv::circle(*img,mmloc.max_point,5,Scalar(0,0,255),3,4,0);
+      cv::circle(*img,mmloc.min_point,5,*bluelabel,3,4,0);
+      cv::circle(*img,mmloc.max_point,5,*redlabel,3,4,0);
     }
   }
 }
@@ -495,11 +584,12 @@ void imageView_example::MainWindow::drawLabels(Mat *img_)
 cv::Mat imageView_example::MainWindow::updateLabelsGray(Mat *gray_)
 {
   cv::Mat *img;
-  cv::Mat norm, t8, color;
+  cv::Mat norm, t8, color,color2;
   img = gray_;
   cv::normalize(*img,norm,0,255, NORM_MINMAX);
   norm.convertTo(t8, CV_8UC1);
   cv::cvtColor(t8,color,cv::COLOR_GRAY2BGR);
+  cv::cvtColor(t8,color2,cv::COLOR_GRAY2BGR);
 
   if(this->button_flag == 0) {
     int x1,x2,y1,y2;
@@ -561,7 +651,7 @@ cv::Mat imageView_example::MainWindow::updateLabelsGray(Mat *gray_)
   }
 
 
-  return color;
+  return color2;
 }
 
 void imageView_example::MainWindow::updateImage(cv::Mat *img_)

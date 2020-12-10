@@ -57,11 +57,14 @@ bool QNode::init() {
     image_transport::ImageTransport it(n);
         image_color_sub = it.subscribe("/camera/color/image_raw", 100, &QNode::imageCallback, this);
 //        image_color_sub = it.subscribe("/usb_cam/image_raw", 100, &QNode::imageCallback, this);
-//        image_lidar_sub = it.subscribe("/camera/depth/image_rect_raw", 100, &QNode::LidarImageCallback, this);
-        image_lidar_sub = it.subscribe("/depth/out", 100, &QNode::LidarImageCallback, this);
+        image_lidar_sub = it.subscribe("/camera/depth/image_rect_raw", 100, &QNode::LidarImageCallback, this);
+//        image_lidar_sub = it.subscribe("/depth/out", 100, &QNode::LidarImageCallback, this);
 //        image_ir_sub = it.subscribe("/lepton/out", 100, &QNode::IrImageCallback, this);
         image_ir_sub = it.subscribe("/ir/usb_cam/image_raw", 100, &QNode::IrImageCallback, this);
         image_ir_16bit_img_sub = it.subscribe("/lepton/out", 100, &QNode::Ir16bImageCallbcak, this);
+    image_color_pub = it.advertise("/fusion/color/out",1);
+    image_depth_pub = it.advertise("/fusion/depth/out",1);
+    image_ir_pub    = it.advertise("/fusion/ir/out",1);
     start();
     return true;
 }
