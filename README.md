@@ -1,6 +1,6 @@
 #### multiple_camera_fusion 
 
-##### **Recommanded hardware spec **
+##### **Recommanded hardware spec**
 * quard core cpu (highly recommand intel CPU series)
 * 8GB RAM
 
