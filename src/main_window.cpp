@@ -140,12 +140,10 @@ void MainWindow::updateImg()
 }
 void MainWindow::updateImgIr()
 {
-  ROS_INFO("debug1");
 }
 
 void MainWindow::updateImgLidar()
 {
-  //  ROS_INFO("update IR");
   cv::Mat dst, roi, output;
   Mat temp(*qnode.lidar_img_qnode);
 
@@ -199,7 +197,6 @@ void MainWindow::updateImgLidar()
 
 void MainWindow::updateImgIr16()
 {
-  ROS_INFO("hello");
   cv::Mat get(*qnode.ir_16bit_img_qnode);
   cv::Mat dst, norm, t8, roi, output;
 
@@ -349,12 +346,12 @@ float imageView_example::MainWindow::map(float value, float istart, float istop,
 
 void MainWindow::Mouse_current_pos()
 {
-  ROS_INFO("current_pos X=%d, Y=%d", ui.labelOrg->x, ui.labelOrg->y);
+//  ROS_INFO("current_pos X=%d, Y=%d", ui.labelOrg->x, ui.labelOrg->y);
 }
 
 void MainWindow::Mouse_Pressed()
 {
-  ROS_INFO("Mouse Pressed X=%d, Y=%d", ui.labelOrg->x, ui.labelOrg->y);
+//  ROS_INFO("Mouse Pressed X=%d, Y=%d", ui.labelOrg->x, ui.labelOrg->y);
   if(this->button_flag == 1)
   {
     ui.lineEdit_x1->setText(QString::number(ui.labelOrg->x));
@@ -365,12 +362,12 @@ void MainWindow::Mouse_Pressed()
 
 void MainWindow::Mouse_left()
 {
-  ROS_INFO("Mouse Left");
+//  ROS_INFO("Mouse Left");
 }
 
 void MainWindow::Mouse_Released()
 {
-  ROS_INFO("Mouse Released");
+//  ROS_INFO("Mouse Released");
   if(this->button_flag == 2)
   {
     ui.lineEdit_x2->setText(QString::number(ui.labelOrg->x));
@@ -483,7 +480,7 @@ void imageView_example::MainWindow::drawLabels(Mat *img_, int order)
 {
   double secs = ros::Time::now().toSec();
   nowTick = static_cast<uint32_t>(secs * 1000.0);
-  ROS_INFO("nowTick = %d, pastTick = %d", nowTick, pastTick);
+//  ROS_INFO("nowTick = %d, pastTick = %d", nowTick, pastTick);
   if(nowTick - pastTick > 100)
   {
     if(blinkflag == 0)
@@ -554,7 +551,7 @@ void imageView_example::MainWindow::drawLabels(Mat *img_, int order)
       max_deg = ui.tableView->model()->index(i,5).data().toDouble();
       min_deg = ui.tableView->model()->index(i,6).data().toDouble();
       th = ui.tableView->model()->index(i,11).data().toDouble();
-      ROS_INFO("max = %f, th = %f", max_deg,th);
+//      ROS_INFO("max = %f, th = %f", max_deg,th);
       if(max_deg > th)
       {
         if(blinkflag)

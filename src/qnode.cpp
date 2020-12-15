@@ -123,11 +123,11 @@ void QNode::Ir16bImageCallbcak(const sensor_msgs::ImageConstPtr& msg_img)
 {
   if(ir_16bit_img_qnode == NULL && !is16IrRecv)
   {
-    ROS_INFO("16 ir1");
+//    ROS_INFO("16 ir1");
       ir_16bit_img_qnode = new cv::Mat(cv_bridge::toCvCopy(msg_img)->image);
       if(ir_16bit_img_qnode != NULL)
       {
-        ROS_INFO("16 ir2");
+//        ROS_INFO("16 ir2");
         is16IrRecv = true;
         Q_EMIT recvImgIr16();
       }

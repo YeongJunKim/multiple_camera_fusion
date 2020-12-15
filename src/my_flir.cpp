@@ -66,7 +66,6 @@ minmaxloc_t my_flir::min_max_location_gray(cv::Mat *img_, cv::Rect interestmask)
 
 double my_flir::pixel2degC(double val)
 {
-  ROS_INFO("val = %f", val);
   return (val - 27315.0) / 100.0;
 }
 
