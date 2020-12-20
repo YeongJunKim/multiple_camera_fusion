@@ -72,7 +72,6 @@ catkin_ws 폴더 내부 구조
 │   ├── multiple_camera_fusion
 │   ├── realsense-ros
 │   ├── test_results
-│   └── usb_cam
 ├── devel
 │   ├── include
 │   ├── lib
