@@ -12,7 +12,7 @@
 재부팅 후 테스트
 ~$ roscore
 ```
-1. 스크립트 설치가 완료되면, src 폴더로 이동.
+2. 스크립트 설치가 완료되면, src 폴더로 이동.
 ```
 ~& ~/catkin_ws
 ```
@@ -39,7 +39,7 @@ src 폴더에 있는 패키지들을 catkin_make를 통해 빌드를 해야 실�
 ├── realsense-ros               <color 와 depth 카메라 뷰어 package>
 ├── ddynamic_reconfigure        <realsense-ros package에 필요한 추가 package>
 ```
-* lepton_camera 패키지를 **정확히** 설치학 위해서는 해당 설치 방법이 나와있는 페이지를 꼭 숙지하셔야합니다. 해당 페이지의 libusb.so 파일의 include path 를 설정해야 할 수도 있습니다.
+* lepton_camera 패키지를 **정확히** 설치학 위해서는 해당 설치 방법이 나와있는 페이지를 꼭 숙지하셔야합니다. 해당 페이지의 libuvc.so 파일의 include path 를 설정해야 할 수도 있습니다.
 * 여기서 realsense-ros 패키지를 **정확히** 설치하기 위해서는 README.md의 버전을 꼭 확인하시고 설치하셔야합니다. 현재 사용한 버전은 realsense2 SDK의 경우 **2.40.0** 이고 realsense-ros 패키지의 경우 **2.20.0** 입니다.
 6. 위의 3개의 패키지에 대한 내용을 **build** 해야지만 비로소 roslaunch 또는 rosrun 명령어를 통해 해당 패키지의 노드를 실행시킬 수 있습니다.
 ```
