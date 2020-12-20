@@ -1,4 +1,4 @@
-#### ROS install
+#### README_ROS
 
 1. 스크립트를 다운받아 ROS 설치 후 재부팅
 ```
